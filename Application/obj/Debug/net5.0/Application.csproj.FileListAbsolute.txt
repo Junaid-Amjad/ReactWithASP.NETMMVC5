@@ -1,0 +1,17 @@
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\bin\Debug\net5.0\Application.deps.json
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\bin\Debug\net5.0\Application.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\bin\Debug\net5.0\ref\Application.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\bin\Debug\net5.0\Application.pdb
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\bin\Debug\net5.0\Domain.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\bin\Debug\net5.0\Persistence.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\bin\Debug\net5.0\Domain.pdb
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\bin\Debug\net5.0\Persistence.pdb
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\obj\Debug\net5.0\Application.csprojAssemblyReference.cache
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\obj\Debug\net5.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\obj\Debug\net5.0\Application.AssemblyInfoInputs.cache
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\obj\Debug\net5.0\Application.AssemblyInfo.cs
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\obj\Debug\net5.0\Application.csproj.CoreCompileInputs.cache
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\obj\Debug\net5.0\Application.csproj.CopyComplete
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\obj\Debug\net5.0\Application.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\obj\Debug\net5.0\ref\Application.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Application\obj\Debug\net5.0\Application.pdb
