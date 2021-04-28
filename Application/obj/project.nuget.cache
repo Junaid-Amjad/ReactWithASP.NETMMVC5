@@ -1,9 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "bA+XNkUHL9UUFVKF4sWvh3I/c5ZYMrFzf+6jxXfYkscQf9qrPJWce+KQF4Kfd9kttaGYz+X6Ua60m8Bc2xb/iw==",
+  "dgSpecHash": "44ICFyv1k+z65dvvSnDJdoWhVzcinroBwY/qg6iCVVI8mkGa4M90/g8ZyhuGZ1aNSWVUVTyQghev3K/83rtvKQ==",
   "success": true,
   "projectFilePath": "E:\\Strantin-Work\\StrandWeb\\Strand-Web-Testing\\DotnetWithReact\\Application\\Application.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\lenovo\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
+    "C:\\Users\\lenovo\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
+    "C:\\Users\\lenovo\\.nuget\\packages\\mediatr\\9.0.0\\mediatr.9.0.0.nupkg.sha512",
+    "C:\\Users\\lenovo\\.nuget\\packages\\mediatr.extensions.microsoft.dependencyinjection\\9.0.0\\mediatr.extensions.microsoft.dependencyinjection.9.0.0.nupkg.sha512",
+    "C:\\Users\\lenovo\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\microsoft.data.sqlite.core\\5.0.2\\microsoft.data.sqlite.core.5.0.2.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\microsoft.dotnet.platformabstractions\\3.1.6\\microsoft.dotnet.platformabstractions.3.1.6.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.2\\microsoft.entityframeworkcore.5.0.2.nupkg.sha512",
@@ -29,7 +34,8 @@
     "C:\\Users\\lenovo\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512",
-    "C:\\Users\\lenovo\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+    "C:\\Users\\lenovo\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\lenovo\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512"
   ],
   "logs": []
 }

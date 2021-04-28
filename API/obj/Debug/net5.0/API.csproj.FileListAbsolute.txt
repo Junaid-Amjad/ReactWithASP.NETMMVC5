@@ -61,3 +61,7 @@ E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5
 E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\runtimes\win-x86\native\e_sqlite3.dll
 E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\Humanizer.dll
 E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Design.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\MediatR.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\MediatR.Extensions.Microsoft.DependencyInjection.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\AutoMapper.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
