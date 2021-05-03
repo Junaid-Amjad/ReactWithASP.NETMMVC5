@@ -1,68 +1,47 @@
-import {  useEffect, useState } from 'react';
-import axios from 'axios';
 import { Container } from 'semantic-ui-react';
-import { Activity } from '../Models/activity';
 import NavBar from './Navbar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
-import {v4 as uuid} from 'uuid';
+import { observer } from 'mobx-react-lite';
+import { Route, Switch, useLocation } from 'react-router';
+import HomePage from '../../features/Home/HomePage';
+import ActivityForm from '../../features/activities/form/ActivityForm';
+import ActivityDetails from '../../features/activities/details/ActivityDetail';
+import TestErrors from '../../features/errors/TestError';
+import { ToastContainer } from 'react-toastify';
+import NotFound from '../../features/errors/NotFound';
+import ServerError from '../../features/errors/ServerError';
+import LoginForm from '../../features/users/loginForm';
 
 function App() {
-  const [Activities,setActivities] = useState<Activity[]>([]);
-  const [selectedActivity,setSelectedActivity] = useState<Activity | undefined>(undefined);
-  const [editMode,setEditMode] = useState(false);
-
-  useEffect(() => {
-    axios.get<Activity[]>("http://localhost:5000/api/activities").then(response => {
-      setActivities(response.data);    
-      })
-  },[])
-
-  function handleSelectActivity(id: string){
-      setSelectedActivity(Activities.find(x=>x.id === id));
-  }
-  function handleCancelSelectedActivity(){
-    setSelectedActivity(undefined);
-  }
-
-  function handleFormOpen(id?: string)
-  {
-    id ? handleSelectActivity(id) : handleCancelSelectedActivity();
-    setEditMode(true);
-  }
-
-  function handleFormClose(){
-    setEditMode(false);
-  }
-
-  function handleCreateOrEditActivity(activity: Activity){
-    activity.id ? setActivities([...Activities.filter(x => x.id !== activity.id),activity])
-    :setActivities([...Activities,{...activity,id:uuid()}]);
-    setEditMode(false);
-    setSelectedActivity(activity);
-  }
-  function handleDeleteActivity(id:string){
-    setActivities([...Activities.filter(x=>x.id !== id)])
-  }
-
+  const location = useLocation();
   return (
     <>
-      <NavBar openForm={handleFormOpen} />
-        <Container style={{marginTop :'7em'}}>
-          <ActivityDashboard 
-          activities={Activities} 
-          selectedActivity={selectedActivity}
-          Selectactivity ={handleSelectActivity}
-          cancelSelectActivity={handleCancelSelectedActivity}
-          editMode={editMode}
-          openForm={handleFormOpen}
-          closeForm={handleFormClose}
-          createOrEdit={handleCreateOrEditActivity}
-          deleteActivity={handleDeleteActivity}
-          />
+      <ToastContainer position='bottom-right' hideProgressBar />
+      <Route exact path='/' component={HomePage} />
+      <Route
+        
+        path={'/(.+)'}
+        
+        render={() => (
+          <>
+          <NavBar />
+            <Container style={{marginTop :'7em'}}>
+              <Switch>
+                <Route exact path='/activities' component={ActivityDashboard} />
+                <Route path='/activities/:id' component={ActivityDetails} />
+                <Route key={location.key} path={['/createActivity','/manage/:id']} component={ActivityForm} />
+                <Route path='/errors' component={TestErrors} />
+                <Route path='/server-error' component={ServerError} />
+                <Route path='/login' component={LoginForm} />
+                <Route component={NotFound} />
+              </Switch>
+          </Container>
+          </>
+        )}
+      />
 
-        </Container>
     </>
   );
 }
 
-export default App;
+export default observer(App);

@@ -1,12 +1,25 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import 'semantic-ui-css/semantic.min.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import App from './App/Layout/App';
-import './App/Layout/styles.css'
+import './App/Layout/styles.css';
+import { store, StoreContext } from './App/stores/store';
 import reportWebVitals from './reportWebVitals';
+import {createBrowserHistory} from 'history';
+import {Router} from 'react-router-dom';
+
+export const history = createBrowserHistory();
 
 ReactDOM.render(
-    <App />,
+    <StoreContext.Provider value={store}>
+      <Router history={history}>
+        <App />
+      </Router>
+      
+    </StoreContext.Provider>
+    ,
   document.getElementById('root')
 );
 
