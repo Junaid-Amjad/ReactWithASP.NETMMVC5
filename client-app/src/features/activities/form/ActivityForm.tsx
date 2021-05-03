@@ -1,12 +1,12 @@
 import { observer } from 'mobx-react-lite'
-import { ChangeEvent, useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import LoadingComponent from '../../../App/Layout/LoadingComponents'
 import { useStore } from '../../../App/stores/store'
 import {v4 as uuid} from 'uuid';
 import { Link } from 'react-router-dom'
-import { Formik,Form,Field } from 'formik'
+import { Formik,Form } from 'formik'
 import * as Yup from 'yup';
 import MyTextInput from '../../../App/common/form/MyTextInput'
 import MyTextArea from '../../../App/common/form/MyTextArea'
