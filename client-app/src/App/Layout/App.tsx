@@ -15,6 +15,7 @@ import { useStore } from '../stores/store';
 import { useEffect } from 'react';
 import LoadingComponent from './LoadingComponents';
 import ModalContainer from '../../App/common/modals/ModalContainer';
+import SavedFile from '../../features/filefolder/SavedFile';
 
 function App() {
   const location = useLocation();
@@ -48,6 +49,7 @@ function App() {
                 <Route path='/activities/:id' component={ActivityDetails} />
                 <Route key={location.key} path={['/createActivity','/manage/:id']} component={ActivityForm} />
                 <Route path='/errors' component={TestErrors} />
+                <Route path='/files' component={SavedFile} />                
                 <Route path='/server-error' component={ServerError} />
                 <Route path='/login' component={LoginForm} />
                 <Route component={NotFound} />

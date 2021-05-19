@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { Activity } from '../Models/activity';
+import { SavedFile } from '../Models/savedFile';
 import { User, UserFormValues } from '../Models/user';
 import { store } from '../stores/store';
 
@@ -12,7 +13,7 @@ const sleep =(delay: number) => {
 }
 
 
-axios.defaults.baseURL ="http://localhost:5000/api";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.request.use(config =>{
     const token = store.commonStore.token;
@@ -83,9 +84,14 @@ const Account={
     register: (user: UserFormValues) => axios.post<User>('/Account/register',user).then(responseBody)
 }
 
+const SavedFiles={
+    getFileNames: () => requests.get<SavedFile[]>('/SavedFile')
+}
+
 const agent ={
     Activities,
-    Account
+    Account,
+    SavedFiles
 }
 
 export default agent;

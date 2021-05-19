@@ -1,0 +1,12 @@
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\bin\Release\net5.0\Domain.deps.json
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\bin\Release\net5.0\Domain.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\bin\Release\net5.0\ref\Domain.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\bin\Release\net5.0\Domain.pdb
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\obj\Release\net5.0\Domain.csprojAssemblyReference.cache
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\obj\Release\net5.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\obj\Release\net5.0\Domain.AssemblyInfoInputs.cache
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\obj\Release\net5.0\Domain.AssemblyInfo.cs
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\obj\Release\net5.0\Domain.csproj.CoreCompileInputs.cache
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\obj\Release\net5.0\Domain.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\obj\Release\net5.0\ref\Domain.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\Domain\obj\Release\net5.0\Domain.pdb

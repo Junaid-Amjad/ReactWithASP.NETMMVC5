@@ -80,3 +80,4 @@ E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5
 E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
 E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\Newtonsoft.Json.dll
