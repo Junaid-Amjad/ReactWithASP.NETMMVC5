@@ -85,7 +85,8 @@ const Account={
 }
 
 const SavedFiles={
-    getFileNames: () => requests.get<SavedFile[]>('/SavedFile')
+    getFileNames: () => requests.get<SavedFile[]>('/SavedFile'),
+    getDirectoryDetail: (Pathname:string) => requests.get<SavedFile[]>(`/SavedFile/${Pathname}`)
 }
 
 const agent ={

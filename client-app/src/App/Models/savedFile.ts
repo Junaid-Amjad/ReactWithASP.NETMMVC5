@@ -2,6 +2,7 @@
 export interface SavedFile{
     isDirectory:boolean,
     path:string,
-    isSamePath:boolean
+    isSamePath:boolean,
+    subFolderPath:string
 
 }

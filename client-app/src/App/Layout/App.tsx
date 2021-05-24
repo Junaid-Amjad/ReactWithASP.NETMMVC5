@@ -17,6 +17,7 @@ import LoadingComponent from './LoadingComponents';
 import ModalContainer from '../../App/common/modals/ModalContainer';
 import SavedFile from '../../features/filefolder/SavedFile';
 
+
 function App() {
   const location = useLocation();
   const {commonStore,userStore} = useStore();
@@ -30,7 +31,6 @@ function App() {
   },[commonStore,userStore])
 
   if(!commonStore.appLoaded) return <LoadingComponent content='Loading app....' />
-
   return (
     <>
       <ToastContainer position='bottom-right' hideProgressBar />
@@ -49,7 +49,8 @@ function App() {
                 <Route path='/activities/:id' component={ActivityDetails} />
                 <Route key={location.key} path={['/createActivity','/manage/:id']} component={ActivityForm} />
                 <Route path='/errors' component={TestErrors} />
-                <Route path='/files' component={SavedFile} />                
+                <Route exact path='/files' component={SavedFile} />
+                <Route path='/files/:pathname+' component={SavedFile} />
                 <Route path='/server-error' component={ServerError} />
                 <Route path='/login' component={LoginForm} />
                 <Route component={NotFound} />

@@ -81,3 +81,10 @@ E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5
 E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
 E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\Newtonsoft.Json.dll
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\publish\web.config
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\publish\API.deps.json
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\publish\API.runtimeconfig.json
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\publish\appsettings.Development.json
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\publish\appsettings.json
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\publish\wwwroot\build\asset-manifest.json
+E:\Strantin-Work\StrandWeb\Strand-Web-Testing\DotnetWithReact\API\bin\Debug\net5.0\publish\wwwroot\build\manifest.json
