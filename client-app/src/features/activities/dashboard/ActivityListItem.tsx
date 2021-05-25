@@ -16,7 +16,7 @@ export default function ActivityListItem({activity}:Props) {
                     <Item>
                         <Item.Image size='tiny' circular src='/asset/user.png' />
                         <Item.Content>
-                            <Item.Header as={Link} to={`/activities/${activity.id}`}>
+                            <Item.Header as={Link} to={`/activities/${activity.activityID}`}>
                                 {activity.title}
                             </Item.Header>
                             <Item.Description>
@@ -41,7 +41,7 @@ export default function ActivityListItem({activity}:Props) {
                 </span>
                 <Button 
                 as={Link} 
-                to={`/activities/${activity.id}`} 
+                to={`/activities/${activity.activityID}`} 
                 color='teal'
                 floated='right'
                 content='View'

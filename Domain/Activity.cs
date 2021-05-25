@@ -1,11 +1,13 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain
 {
     public class Activity
     {
-        
-        public Guid ID { get; set; }
+        [Key]
+        public Guid ActivityID { get; set; }
         public String Title { get; set; }
         public DateTime Date { get; set; }
         public String Description { get; set; }

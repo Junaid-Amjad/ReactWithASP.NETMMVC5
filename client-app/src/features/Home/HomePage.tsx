@@ -12,7 +12,7 @@ export default observer(function HomePage(){
             <Container text>
                 <Header as='h1' inverted>
                     <Image size='massive' src='/asset/logo.png' alt='logo' style={{marginBottom:12}} />
-                    ReactWithDotNet API
+                    StrandUSA
                 </Header>
                 {userStore.isLoggedIn ? (
                     <>
@@ -30,11 +30,8 @@ export default observer(function HomePage(){
                             Register
                         </Button>
                     </>
-
-                )}
-                
+                )}                
             </Container>
-
         </Segment>
 
     )

@@ -50,7 +50,7 @@ export default class ActivityStore{
     }
     private setActivity = (activity:Activity) =>{
         activity.date = new Date(activity.date!);
-        this.activityRegistry.set(activity.id,activity);        
+        this.activityRegistry.set(activity.activityID,activity);
     }
     loadActivity = async (id:string) =>{
         let activity=this.getActivity(id);
@@ -82,10 +82,11 @@ export default class ActivityStore{
 
     createActivity = async (activity:Activity) => {
         this.loading=true;
-        try{
+        try{            
             await agent.Activities.create(activity);
+            
             runInAction(() => {
-                this.activityRegistry.set(activity.id,activity);
+                this.activityRegistry.set(activity.activityID,activity);
                 this.selectedActivity = activity;
                 this.editMode=false;
                 this.loading=false;
@@ -103,7 +104,7 @@ export default class ActivityStore{
         try{
             await agent.Activities.update(activity);
             runInAction(() => {
-                this.activityRegistry.set(activity.id,activity);
+                this.activityRegistry.set(activity.activityID,activity);
                 this.selectedActivity = activity;
                 this.editMode=false;
                 this.loading=false;

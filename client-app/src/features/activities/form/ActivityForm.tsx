@@ -26,7 +26,7 @@ export default observer(function ActivityForm(){
 
     const{id} = useParams<{id:string}>();
     const [activity,setActivity] = useState<Activity>({
-        id:'',
+        activityID:'',
         title:'',
         category:'',
         description:'',
@@ -50,17 +50,17 @@ export default observer(function ActivityForm(){
 
     function handleFormSubmit(activity:Activity)
     {
-        if(activity.id.length === 0)
+        if(activity.activityID.length === 0)
         {
             let newActivity ={
                 ...activity,
-                id:uuid()
+                activityID:uuid()
             }
-            createActivity(newActivity).then(() => history.push(`/activities/${newActivity.id}`))
+            createActivity(newActivity).then(() => history.push(`/activities/${newActivity.activityID}`))
 
         }else
         {
-            updateActivity(activity).then(() => history.push(`/activities/${activity.id}`))
+            updateActivity(activity).then(() => history.push(`/activities/${activity.activityID}`))
         }
     }
 
