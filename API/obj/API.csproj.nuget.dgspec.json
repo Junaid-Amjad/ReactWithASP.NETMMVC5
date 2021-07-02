@@ -85,6 +85,14 @@
             "System.Runtime.InteropServices": {
               "target": "Package",
               "version": "[4.3.0, )"
+            },
+            "Xabe.FFmpeg": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "xFFmpeg.NET": {
+              "target": "Package",
+              "version": "[5.0.1, )"
             }
           },
           "imports": [

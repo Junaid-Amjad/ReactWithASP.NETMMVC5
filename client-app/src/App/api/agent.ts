@@ -2,48 +2,51 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import { history } from '../..';
 import { Activity } from '../Models/activity';
+import { CameraIPResult } from '../Models/cameraIPResult';
+import { CameraView } from '../Models/cameraView';
 import { SavedFile } from '../Models/savedFile';
 import { User, UserFormValues } from '../Models/user';
+import SearchFile from '../stores/searchfile';
 import { store } from '../stores/store';
 
-const sleep =(delay: number) => {
-    return new Promise((resolve) =>{
-        setTimeout(resolve,delay)
+const sleep = (delay: number) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, delay)
     })
 }
 
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
-axios.interceptors.request.use(config =>{
+axios.interceptors.request.use(config => {
     const token = store.commonStore.token;
-    if(token) config.headers.Authorization = `Bearer ${token}`;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
 })
 
 axios.interceptors.response.use(async response => {
-        await sleep(1000);
-        return response;
-},(error: AxiosError)=>{
-    const {data,status,config} = error.response!;
-    switch(status){
+    if (process.env.NODE_ENV === 'development') await sleep(1000);
+    return response;
+}, (error: AxiosError) => {
+    const { data, status, config } = error.response!;
+    switch (status) {
         case 400:
-            if(typeof data === 'string'){
+            if (typeof data === 'string') {
                 toast.error('Bad Request');
             }
-            if(config.method === 'get' && data.errors.hasOwnProperty('id')){
+            if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
                 history.push('/not-found');
             }
-            if(data.errors){
-                const modalStateErrors =[];
-                for(const key in data.errors){
-                    if(data.errors[key]){
+            if (data.errors) {
+                const modalStateErrors = [];
+                for (const key in data.errors) {
+                    if (data.errors[key]) {
                         modalStateErrors.push(data.errors[key]);
                     }
                 }
-                throw modalStateErrors.flat();                                
+                throw modalStateErrors.flat();
             }
-            
+
             break;
         case 401:
             toast.error('unauthorized');
@@ -55,44 +58,62 @@ axios.interceptors.response.use(async response => {
             store.commonStore.setServerError(data);
             history.push('/server-error');
             break;
-        
+
     }
-    return Promise.reject(error);    
+    return Promise.reject(error);
 })
 
-const responseBody =<T> (response: AxiosResponse<T>) => response.data;
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
-const requests ={
+const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
-    post: <T>(url: string,body:{}) => axios.post<T>(url,{}).then(responseBody),
-    put: <T>(url: string,body:{}) => axios.put<T>(url,{}).then(responseBody),
+    post: <T>(url: string, body: {}) => axios.post<T>(url, {}).then(responseBody),
+    put: <T>(url: string, body: {}) => axios.put<T>(url, {}).then(responseBody),
     del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
-    
+
 }
 
-const Activities ={
+const Activities = {
     list: () => requests.get<Activity[]>('/activities'),
-    details: (id:string) => requests.get<Activity>(`/activities/${id}`),
-    create:(activity: Activity) => axios.post<void>(`/activities`,activity), //requests.post<void>(`/activities`,activity),
-    update:(activity: Activity) => axios.put<void>(`/activities/${activity.activityID}`,activity),
-    delete:(id:string) => axios.delete<void>(`/activities/${id}`)
+    details: (id: string) => requests.get<Activity>(`/activities/${id}`),
+    create: (activity: Activity) => axios.post<void>(`/activities`, activity), //requests.post<void>(`/activities`,activity),
+    update: (activity: Activity) => axios.put<void>(`/activities/${activity.activityID}`, activity),
+    delete: (id: string) => axios.delete<void>(`/activities/${id}`)
 }
 
-const Account={
-    current: ()=> requests.get<User>('/Account'),
-    login: (user: UserFormValues)=> axios.post<User>('/Account/login',user).then(responseBody),
-    register: (user: UserFormValues) => axios.post<User>('/Account/register',user).then(responseBody)
+const Account = {
+    current: () => requests.get<User>('/Account'),
+    login: (user: UserFormValues) => axios.post<User>('/Account/login', user).then(responseBody),
+    register: (user: UserFormValues) => axios.post<User>('/Account/register', user).then(responseBody)
 }
 
-const SavedFiles={
+const SavedFiles = {
     getFileNames: () => requests.get<SavedFile[]>('/SavedFile'),
-    getDirectoryDetail: (Pathname:string) => requests.get<SavedFile[]>(`/SavedFile/${Pathname}`)
+    getDirectoryDetail: (Pathname: string) => requests.get<SavedFile[]>(`/SavedFile/${Pathname}`)
 }
 
-const agent ={
+const cameraView = {
+    getLiveVideoUrl: () => requests.get<CameraView[]>('/CameraView')
+}
+
+const StreamIP = {
+    setStreamOfCamera: (FilePath: string, URL: string) => requests.get<CameraIPResult>(`/Stream/${URL}/${FilePath}`),
+    getFileExist: (FilePath: string) => requests.get<boolean>(`/Stream/${FilePath}`),
+    deleteFiles: (FilePath: string) => requests.get<boolean>(`/Stream/deleteFile/${FilePath}`),
+    canceltoken: (FilePath: string) => requests.get<boolean>(`/Stream/CancelToken/${FilePath}`)
+}
+
+const SearchFiles = {
+    getXMLFileofCamera: () => requests.get<SearchFile>(`/SearchFile/GetXMLListOFCamera`),
+}
+
+const agent = {
     Activities,
     Account,
-    SavedFiles
+    SavedFiles,
+    cameraView,
+    StreamIP,
+    SearchFiles
 }
 
 export default agent;

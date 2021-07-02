@@ -35,6 +35,8 @@
           "System.IdentityModel.Tokens.Jwt": "6.11.0",
           "System.Net.Primitives": "4.3.1",
           "System.Runtime.InteropServices": "4.3.0",
+          "Xabe.FFmpeg": "5.0.2",
+          "xFFmpeg.NET": "5.0.1",
           "Microsoft.AspNetCore.Antiforgery": "5.0.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.Authentication.Cookies": "5.0.0.0",
@@ -1635,6 +1637,31 @@
           "System.Threading": "4.3.0",
           "System.Xml.ReaderWriter": "4.3.0",
           "System.Xml.XmlDocument": "4.3.0"
+        }
+      },
+      "Xabe.FFmpeg/5.0.2": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Xabe.FFmpeg.dll": {
+            "assemblyVersion": "5.0.2.0",
+            "fileVersion": "5.0.2.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Xabe.FFmpeg.dll": {}
+        }
+      },
+      "xFFmpeg.NET/5.0.1": {
+        "runtime": {
+          "lib/net5.0/FFmpeg.NET.dll": {
+            "assemblyVersion": "5.0.1.0",
+            "fileVersion": "5.0.1.0"
+          }
+        },
+        "compile": {
+          "lib/net5.0/FFmpeg.NET.dll": {}
         }
       },
       "Application/1.0.0": {
@@ -4192,6 +4219,20 @@
       "sha512": "sha512-MYoTCP7EZ98RrANESW05J5ZwskKDoN0AuZ06ZflnowE50LTpbR5yRg3tHckTVm5j/m47stuGgCrCHWePyHS70Q==",
       "path": "system.xml.xmlserializer/4.3.0",
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
+    },
+    "Xabe.FFmpeg/5.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-f/P/oMIX6ozn8VvLIMQHiyNSzuWr9187WKy8RXLivKcKrOeSCUuDX9xBl0Ic/odv6VxsH0MiUwnXivme2iSACg==",
+      "path": "xabe.ffmpeg/5.0.2",
+      "hashPath": "xabe.ffmpeg.5.0.2.nupkg.sha512"
+    },
+    "xFFmpeg.NET/5.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-c1qkS4pPojztOfCD++Zy0hvJXz2Kmizn2qxAGm+R2jZq/XtjtxWHdCfzzvjKmA5The3g/BNuwyTQSPNlNSgm2A==",
+      "path": "xffmpeg.net/5.0.1",
+      "hashPath": "xffmpeg.net.5.0.1.nupkg.sha512"
     },
     "Application/1.0.0": {
       "type": "project",

@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import ActivityStore from "./activityStore";
+import CameraViewStore from "./cameraViewStore";
 import Commonstore from "./commonStore";
 import ModalStore from "./modalStore";
 import SavedFileStore from "./savedFileStore";
@@ -11,6 +12,7 @@ interface Store{
     userStore:UserStore;
     modalStore:ModalStore;
     savedFileStore:SavedFileStore;
+    cameraViewStore:CameraViewStore;
 }
 
 export const store:Store={
@@ -18,7 +20,8 @@ export const store:Store={
     commonStore: new Commonstore(),
     userStore: new UserStore(),
     modalStore: new ModalStore(),
-    savedFileStore: new SavedFileStore()
+    savedFileStore: new SavedFileStore(),
+    cameraViewStore: new CameraViewStore()
 }
 
 export const StoreContext = createContext(store);

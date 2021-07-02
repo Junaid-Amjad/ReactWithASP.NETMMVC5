@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "WaHjel2/sV2ksX9jpmckoMpFWkIwLfS3RcSPVMZmTd1tDja/jlQbt4tghDioNIc+V8dsk4cbw1xsojFNu4UPsA==",
+  "dgSpecHash": "oKL5OjZKEwsdCYeam5ovGJBqqsYadJ1VatCvWuH6CrNlTrXHC62BqE9x1o2MR4TJQu1IZhMboXAf1gvL9V+R9A==",
   "success": true,
   "projectFilePath": "E:\\Strantin-Work\\StrandWeb\\Strand-Web-Testing\\DotnetWithReact\\API\\API.csproj",
   "expectedPackageFiles": [
@@ -124,7 +124,9 @@
     "C:\\Users\\lenovo\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\lenovo\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\lenovo\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
+    "C:\\Users\\lenovo\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512",
+    "C:\\Users\\lenovo\\.nuget\\packages\\xabe.ffmpeg\\5.0.2\\xabe.ffmpeg.5.0.2.nupkg.sha512",
+    "C:\\Users\\lenovo\\.nuget\\packages\\xffmpeg.net\\5.0.1\\xffmpeg.net.5.0.1.nupkg.sha512"
   ],
   "logs": []
 }

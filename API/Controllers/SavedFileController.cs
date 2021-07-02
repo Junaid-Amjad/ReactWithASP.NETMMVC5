@@ -8,21 +8,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using API.Classes;
 
 namespace API.Controllers
 {
-    public class FilePath
-    {
-        public bool isDirectory { get; set; }
-        public string path { get; set; }
-        public bool isSamePath { get; set; }
-    }
 
 
     [AllowAnonymous]
-    [ApiController]
-    [Route("api/[controller]")]
-    public class SavedFileController : ControllerBase
+    public class SavedFileController : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
@@ -30,9 +23,10 @@ namespace API.Controllers
         private string PathName; //= @"";
         private string VirtualPathName;// = @"";
         private readonly string searchPattern;// = "*.mp4";
+        private string configFolderName;
+ 
         private readonly IConfiguration __config;
         public SavedFileController(UserManager<AppUser> userManager,
-
         SignInManager<AppUser> signInManager, TokenService token, IConfiguration config)
         {
             __config = config;
@@ -43,6 +37,7 @@ namespace API.Controllers
             PathName = __config["FilesDriveIISPath"];
             VirtualPathName = __config["FilesDrivePath"];
             searchPattern = __config["FileSearchPattern"];
+            configFolderName = __config["configFolderName"];
 
         }
 
@@ -68,6 +63,7 @@ namespace API.Controllers
         {
             return getFilesPath();
         }
+
         private ActionResult getFilesPath(){
             List<FilePath> files2 = new List<FilePath>();
 
