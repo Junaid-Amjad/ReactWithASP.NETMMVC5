@@ -119,6 +119,44 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Domain.GridLayoutDetail", b =>
+                {
+                    b.Property<long>("GridLayoutDetailID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("CameraIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("GridLayoutMasterID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("GridLayoutDetailID");
+
+                    b.HasIndex("GridLayoutMasterID");
+
+                    b.ToTable("GridLayoutDetails");
+                });
+
+            modelBuilder.Entity("Domain.GridLayoutMaster", b =>
+                {
+                    b.Property<long>("GridLayoutMasterID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("LayoutName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NoofColumns")
+                        .HasColumnType("int");
+
+                    b.HasKey("GridLayoutMasterID");
+
+                    b.ToTable("GridLayoutMasters");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -248,6 +286,17 @@ namespace Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Domain.GridLayoutDetail", b =>
+                {
+                    b.HasOne("Domain.GridLayoutMaster", "GridLayoutMaster")
+                        .WithMany()
+                        .HasForeignKey("GridLayoutMasterID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GridLayoutMaster");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

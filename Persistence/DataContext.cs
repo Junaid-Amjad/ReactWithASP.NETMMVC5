@@ -10,5 +10,7 @@ namespace Persistence
         {
         }
         public DbSet<Activity> Activities { get; set; }
+        public DbSet<GridLayoutMaster> GridLayoutMasters {get;set;}
+        public DbSet<GridLayoutDetail> GridLayoutDetails { get; set; }
     }
 }

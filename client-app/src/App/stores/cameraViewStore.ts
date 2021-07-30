@@ -1,163 +1,209 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
+import convertStringToAscii, { sleep } from "../common/class/globalCollection";
 import { CameraView } from "../Models/cameraView";
 
-
-export default class CameraViewStore {
-    loadingInitial = false;
-    browserLinkChanged = false;
-    //    loadingToDeleteFile=false;
-    cameraViewRegistry = new Map<string, CameraView>();
-    constructor() {
-        makeAutoObservable(this);
-    }
-
-
-    get getCameraViewResult() {
-        return Array.from(this.cameraViewRegistry.values()).sort();
-    }
-    deleteAllFiles = async () => {
-        //      this.loadingToDeleteFile=true;
-        try {
-            this.browserLinkChanged = true;
-            const filedeleted = await agent.StreamIP.deleteFiles("0");
-            runInAction(async () => {
-                if (filedeleted) {
-                    this.cameraViewRegistry.forEach(async (value, key) => {
-                        const camerafile = this.convertStringToAscii(value.FilePath);
-                        const tokenCanceled = await agent.StreamIP.canceltoken(camerafile);
-                        runInAction(() => {
-                            if (tokenCanceled) {
-                                //                                this.loadingToDeleteFile=false;
-                            }
-
-                        })
-
-                    })
-
-                }
-            })
-        }
-        catch (error) {
-            console.log(error);
-            runInAction(() => {
-                //             this.loadingToDeleteFile=false;
-            })
-        }
-    }
-
-
-    getIndividualIPStream = async (UUID: string) => {
-        let resultfromCameraObject = this.cameraViewRegistry.get(UUID);
-        console.log(resultfromCameraObject?.FilePath);
-        if (resultfromCameraObject?.isProcessed) {
-            const filedeleted = await agent.StreamIP.deleteFiles(resultfromCameraObject.FilePath);
-            runInAction(async () => {
-                if (filedeleted) {
-                    resultfromCameraObject!.isProcessed = false;
-                    await this.callTheFileForProcessing(resultfromCameraObject!);
-                }
-            })
-        }
-        else {
-            resultfromCameraObject!.isProcessed = undefined;
-            await this.callTheFileForProcessing(resultfromCameraObject!);
-        }
-
-    }
-
-    loadCameraView = async () => {
-
-        this.loadingInitial = true;
-        let isRecordFound = false;
-
-        try {
-            this.cameraViewRegistry.clear();
-            await this.deleteAllFiles();
-            const camerav = await agent.cameraView.getLiveVideoUrl();
-            runInAction(async () => {
-                this.browserLinkChanged = false;
-                camerav.forEach(cameraview => {
-                    this.setCameraResult(cameraview);
-                    isRecordFound = true;
-                    if (isRecordFound) {
-                        this.getCameraViewResult.forEach(async (value, key) => {
-                            await this.callTheFileForProcessing(value);
-
-                        })
-                    }
-                    this.loadingInitial = false;
-
-                })
-            })
-        }
-        catch (error) {
-            console.log(error);
-            runInAction(() => {
-                this.loadingInitial = false;
-            })
-        }
-    }
-    private uuidv4() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r && 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-
-    private setCameraResult = (cameraView: CameraView) => {
-        cameraView.FileName = this.uuidv4() + '.m3u8';
-        cameraView.FilePath = this.uuidv4() + '/' + cameraView.FileName;
-        this.cameraViewRegistry.set(cameraView.guid.toString(), cameraView);
-    }
-
-    convertStringToAscii(value: string) {
-        let u = "";
-        for (var i = 0; i < value.length; i++) {
-            u += value.charCodeAt(i) + '-';
-        }
-        return u;
-    }
-    async callTheFileForProcessing(cameraView: CameraView) {
-        try {
-            if (!cameraView.isProcessed) {
-                const cameraurl = this.convertStringToAscii(cameraView.url);
-                const camerafile = this.convertStringToAscii(cameraView.FilePath);
-
-                cameraView.IPAddressPath = process.env.REACT_APP_IP_Addr;
-                const result = await agent.StreamIP.setStreamOfCamera(camerafile, cameraurl);
-                runInAction(async () => {
-                    cameraView.outputFolder = result.fileServerAddress;
-                    console.log(cameraView.url + " " + result.iPfound);
-                    if (result.iPfound) {
-                        cameraView.isProcessed = true;
-                        const fileresult = await agent.StreamIP.getFileExist(camerafile);
-                        runInAction(() => {
-                            console.log(cameraView.IPAddressPath + "  " + cameraView.FilePath)
-                            if (fileresult) {
-                                cameraView.isFileProcessed = true;
-                            }
-
-                            if (this.browserLinkChanged) {
-                                this.deleteAllFiles()
-                            }
-                        })
-                    }
-                    else {
-                        cameraView.isProcessed = false;
-                        cameraView.isFileProcessed = false;
-                    }
-                })
-            }
-        }
-        catch (error) {
-            console.log(error);
-            runInAction(() => {
-
-
-            })
-        }
-
-    }
+interface cameralaodeddetails {
+  FilePath: string;
+  iterate: number;
+  maximumiteratealllowed: number;
 }
 
+export default class CameraViewStore {
+  loadingInitial = false;
+  browserLinkChanged = false;
+  calltimerInterval = false;
+  maximumallowed = 4;
+  istimerstart = false;
+  cameraViewRegistry = new Map<string, CameraView>();
+  processedcamerafile: cameralaodeddetails[] = [];
+
+  constructor() {
+    makeAutoObservable(this);
+  }
+
+  get getCameraViewResult() {
+    return Array.from(this.cameraViewRegistry.values()).sort();
+  }
+  deleteFiles = async (fileName: string) => {
+    //this.loadingToDeleteFile=true;
+    try {
+      this.browserLinkChanged = false;
+
+      const filedeleted = await agent.StreamIP.deleteFiles(fileName);
+      runInAction(() => {
+        if (filedeleted.statusID !== 1) return true;
+        else return false;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  getIndividualIPStream = async (UUID: string) => {
+    if (!this.istimerstart) this.calltimerInterval = false;
+    let resultfromCameraObject = this.cameraViewRegistry.get(UUID);
+    if (resultfromCameraObject) {
+      await this.callTheFileForProcessing(resultfromCameraObject!);
+    }
+  };
+
+  loadCameraView = async () => {
+    this.loadingInitial = true;
+    let isRecordFound = false;
+    this.calltimerInterval = false;
+    try {
+      this.cameraViewRegistry.clear();
+      await this.deleteFiles("0");
+      const camerav = await agent.cameraView.getLiveVideoUrl();
+      runInAction(async () => {
+        this.browserLinkChanged = false;
+        camerav.forEach((cameraview) => {
+          this.setCameraResult(cameraview);
+          isRecordFound = true;
+          if (isRecordFound) {
+            this.getCameraViewResult.forEach(async (value, key) => {
+              await this.callTheFileForProcessing(value);
+            });
+          }
+          this.loadingInitial = false;
+        });
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction(() => {
+        this.loadingInitial = false;
+      });
+    }
+  };
+  private uuidv4() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c === "x" ? r : r && 0x3 | 0x8;
+        return v.toString(16);
+      }
+    );
+  }
+
+  private setCameraResult = (cameraView: CameraView) => {
+    cameraView.FileName = this.uuidv4() + ".m3u8";
+    cameraView.FilePath = this.uuidv4() + "/" + cameraView.FileName;
+    this.cameraViewRegistry.set(cameraView.guid.toString(), cameraView);
+  };
+
+  async processRemainingFile(camerafile: string) {
+    const FileExist = await agent.StreamIP.getFileExist(camerafile);
+    if (FileExist.statusID === 1) {
+      return true;
+    } else return false;
+  }
+
+  async isFileProcessed(camerafile: string) {
+    const FileExist = await agent.StreamIP.getFileExist(camerafile);
+    if (FileExist.statusID === 1) {
+      return true;
+    } else return false;
+  }
+
+  async loopandcheckingvalue() {
+    let timeInterval = setInterval(async () => {
+      this.istimerstart = true;
+      var i = this.processedcamerafile.length;
+      while (i--) {
+        const value = this.processedcamerafile[i];
+        if (value.iterate > value.maximumiteratealllowed) {
+          runInAction(() => {
+            this.getCameraViewResult.forEach((valueofcamera, key) => {
+              if (
+                convertStringToAscii(valueofcamera.FilePath) === value.FilePath
+              ) {
+                valueofcamera.isProcessed = false;
+                valueofcamera.isFileProcessed = false;
+                this.deleteFiles(valueofcamera.processID.toString());
+              }
+            });
+          });
+          this.processedcamerafile.splice(i, 1);
+        } else {
+          const result = await this.processRemainingFile(value.FilePath);
+          if (result) {
+            runInAction(() => {
+              this.getCameraViewResult.forEach((valueofcamera, key) => {
+                if (
+                  convertStringToAscii(valueofcamera.FilePath) ===
+                  value.FilePath
+                ) {
+                  valueofcamera.isFileProcessed = true;
+                }
+              });
+            });
+            this.processedcamerafile.splice(i, 1);
+          }
+          value.iterate++;
+        }
+      }
+      if (this.processedcamerafile.length === 0) {
+        clearInterval(timeInterval);
+        this.istimerstart = false;
+      }
+      if (this.browserLinkChanged) {
+        this.deleteFiles("0");
+      }
+    }, 5000);
+  }
+
+  async callTheFileForProcessing(cameraView: CameraView) {
+    try {
+      if (!cameraView.isProcessed) {
+        const cameraurl = convertStringToAscii(cameraView.url);
+        const camerafile = convertStringToAscii(cameraView.FilePath);
+
+        cameraView.IPAddressPath = process.env.REACT_APP_IP_Addr;
+        const result = await agent.StreamIP.setStreamOfCamera(
+          camerafile,
+          cameraurl
+        );
+        runInAction(async () => {
+          if (result.iPfound) {
+            cameraView.isProcessed = true;
+            cameraView.processID = result.processID;
+            sleep(5000);
+            if (await this.isFileProcessed(camerafile)) {
+              runInAction(() => {
+                cameraView.isFileProcessed = true;
+              });
+            } else {
+              let isFound = false;
+              let s: cameralaodeddetails = {
+                FilePath: camerafile,
+                maximumiteratealllowed: this.maximumallowed,
+                iterate: 0,
+              };
+              for (let i = 0; i < this.processedcamerafile.length; i++) {
+                if (this.processedcamerafile[i].FilePath === s.FilePath) {
+                  isFound = true;
+                  break;
+                }
+              }
+
+              if (!isFound) {
+                this.processedcamerafile.push(s);
+              }
+              if (!this.calltimerInterval) {
+                this.calltimerInterval = true;
+                this.loopandcheckingvalue();
+              }
+            }
+          } else {
+            cameraView.isProcessed = false;
+            cameraView.isFileProcessed = false;
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}

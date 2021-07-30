@@ -7,21 +7,21 @@ import App from './App/Layout/App';
 import './App/Layout/styles.css';
 import { store, StoreContext } from './App/stores/store';
 import reportWebVitals from './reportWebVitals';
-import {createBrowserHistory} from 'history';
-import {Router} from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { Router } from 'react-router-dom';
 import ScrollToTop from './App/Layout/ScrollToTop';
 import React from 'react';
 
 export const history = createBrowserHistory();
 
 ReactDOM.render(
-    <StoreContext.Provider value={store}>
-      <Router history={history}>
-        <ScrollToTop />
-        <App />
-      </Router>      
-    </StoreContext.Provider>
-    ,
+  <StoreContext.Provider value={store}>
+    <Router history={history}>
+      <ScrollToTop />
+      <App />
+    </Router>
+  </StoreContext.Provider>
+  ,
   document.getElementById('root')
 );
 

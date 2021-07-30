@@ -1,159 +1,212 @@
 import { Formik } from "formik"
 import { observer } from "mobx-react-lite"
 import * as Yup from 'yup';
-import { Button, Form, Grid, Header, Label, Radio, Segment, } from "semantic-ui-react"
+import { Button, Divider, Form, Grid, Header, Label, Radio, Segment, } from "semantic-ui-react"
 import MyDateInput from "../../App/common/form/MyDateInput";
 import React, { useState } from "react";
+import { useStore } from "../../App/stores/store";
+import SearchFormResultList from "./SearchFormResultList";
 
-interface SearchForm {
+interface SearchForminterface {
     DateFrom: Date | null;
     TimeFrom: Date | null;
     DateTo: Date | null;
     TimeTo: Date | null;
     OrderByID: Number;
+    StartTickDate: Number;
+    EndTickDate: Number;
 
 }
 
 export default observer(function SearchForm() {
-
+    const { searchFileStore } = useStore();
+    const { getSearchFilterFiles, savedFileSearchedRegistry, loadingSearchingFile, isLoadingContent } = searchFileStore;
+    let orderbyidlocal = 1;
 
     const validationSchema = Yup.object({
-        datefrom: Yup.string().required('Date From is Required').nullable(),
-        timefrom: Yup.string().required('Time From is required').nullable(),
-        dateto: Yup.string().required('Date To is Required').nullable(),
-        timeto: Yup.string().required('Time To is Required').nullable(),
+        DateFrom: Yup.string().required('Date From is Required').nullable(),
+        TimeFrom: Yup.string().required('Time From is required').nullable(),
+        DateTo: Yup.string().required('Date To is Required').nullable(),
+        TimeTo: Yup.string().required('Time To is Required').nullable(),
     })
-    const [searchform, setSearchForm] = useState<SearchForm>({
+    const [searchform, setsearchform] = useState<SearchForminterface>({
         DateFrom: null,
         TimeFrom: null,
         DateTo: null,
         TimeTo: null,
-        OrderByID: 0
+        OrderByID: 0,
+        StartTickDate: 0,
+        EndTickDate: 0
 
     });
 
-    function handleFormSubmit(activity: SearchForm) {
-        console.log('After Searching');
+    const handleInputChange = (score: any) => {
+        orderbyidlocal = score;
+    };
 
 
+    async function handleFormSubmit(searchformparameter: SearchForminterface) {
 
-        //        if (activity.activityID.length === 0) {
-        //            let newActivity = {
-        //                ...activity,
-        //                activityID: uuid()
-        //            }
-        //            createActivity(newActivity).then(() => history.push(`/activities/${newActivity.activityID}`))
+        searchformparameter.OrderByID = orderbyidlocal;
 
-        //        } else {
-        //           updateActivity(activity).then(() => history.push(`/activities/${activity.activityID}`))
-        //       }
+        var timefrom = (searchformparameter.TimeFrom!.getHours() < 10 ? '0' : '') + searchformparameter.TimeFrom!.getHours() + ':' +
+            (searchformparameter.TimeFrom!.getMinutes() < 10 ? '0' : '') + searchformparameter.TimeFrom!.getMinutes() + ':' +
+            (searchformparameter.TimeFrom!.getSeconds() < 10 ? '0' : '') + searchformparameter.TimeFrom!.getSeconds();
+
+
+        var timeto = (searchformparameter.TimeTo!.getHours() < 10 ? '0' : '') + searchformparameter.TimeTo!.getHours() + ':' +
+            (searchformparameter.TimeTo!.getMinutes() < 10 ? '0' : '') + searchformparameter.TimeTo!.getMinutes() + ':' +
+            (searchformparameter.TimeTo!.getSeconds() < 10 ? '0' : '') + searchformparameter.TimeTo!.getSeconds();
+
+
+        var datefrom = new Date(searchformparameter.DateFrom?.toDateString() + ' ' + timefrom.toString());
+        var dateto = new Date(searchformparameter.DateTo?.toDateString() + ' ' + timeto.toString());
+
+
+        var starttickdate = datefrom.getTime();
+        var endtickdate = dateto.getTime();
+
+        searchformparameter.StartTickDate = starttickdate;
+        searchformparameter.EndTickDate = endtickdate;
+
+        await getSearchFilterFiles(searchformparameter);
+        setsearchform(searchformparameter);
     }
 
+
+
     return (
-        <Segment clearing>
-            <Header content='Searching and Display Options' />
-            <Formik
-                validationSchema={validationSchema}
-                enableReinitialize initialValues={searchform}
-                onSubmit={values => handleFormSubmit(values)}>
-                {({ handleSubmit, isValid, isSubmitting, dirty }) => (
-                    <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                        <Grid columns={2}>
-                            <Grid.Column>
-                                <Grid.Row>
-                                    <Segment raised>
-                                        <Label content='Date From' color='blue' ribbon />
-                                        <MyDateInput
-                                            dateFormat='MMMM dd, yyyy'
-                                            name='datefrom'
-                                            placeholderText='Date From'
-                                        />
-                                        <Label content='Time From' color='blue' ribbon />
-                                        <MyDateInput
-                                            dateFormat='h:mm aa'
-                                            name='timefrom'
-                                            placeholderText='Time From'
-                                            showTimeSelectOnly
-                                            showTimeInput
-                                        />
-                                    </Segment>
+        <>
+            <Segment clearing>
+                <Header content='Searching and Display Options' />
+                <Divider />
+                <Formik
+                    validationSchema={validationSchema}
+                    enableReinitialize initialValues={searchform}
+                    onSubmit={values => handleFormSubmit(values)}>
+                    {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+                        <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
+                            {/*InputFields*/}
+                            <Grid columns={4} stackable>
+                                <Grid.Column>
+                                    <Grid.Row>
+                                        <Segment raised>
+                                            <Label content='Date From' color='blue' ribbon />
+                                            <MyDateInput
+                                                dateFormat='MMMM dd, yyyy'
+                                                name='DateFrom'
+                                                placeholderText='Date From'
+                                            />
+                                        </Segment>
+                                    </Grid.Row>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Grid.Row>
+                                        <Segment raised>
+                                            <Label content='Time From' color='blue' ribbon />
+                                            <MyDateInput
+                                                dateFormat='h:mm aa'
+                                                name='TimeFrom'
+                                                placeholderText='Time From'
+                                                showTimeSelectOnly
+                                                showTimeInput
+                                            />
+                                        </Segment>
+                                    </Grid.Row>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Grid.Row>
+                                        <Segment raised>
+                                            <Label content='Date To' color='blue' ribbon />
+                                            <MyDateInput
+                                                dateFormat='MMMM dd, yyyy'
+                                                name='DateTo'
+                                                placeholderText='Date To'
+                                            />
+                                        </Segment>
+                                    </Grid.Row>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Grid.Row>
+                                        <Segment raised>
+                                            <Label content='Time To' color='blue' ribbon />
+                                            <MyDateInput
+                                                dateFormat='h:mm aa'
+                                                name='TimeTo'
+                                                placeholderText='Time To'
+                                                showTimeSelectOnly
+                                                showTimeInput
+                                            />
+                                        </Segment>
+                                    </Grid.Row>
+                                </Grid.Column>
+                            </Grid>
 
-                                </Grid.Row>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Grid.Row>
-                                    <Segment raised>
-                                        <Label content='Date To' color='blue' ribbon />
-                                        <MyDateInput
-                                            dateFormat='MMMM dd, yyyy'
-                                            name='dateto'
-                                            placeholderText='Date To'
-                                        />
-                                        <Label content='Time To' color='blue' ribbon />
-                                        <MyDateInput
-                                            dateFormat='h:mm aa'
-                                            name='timeto'
-                                            placeholderText='Time To'
-                                            showTimeSelectOnly
-                                            showTimeInput
-                                        />
-                                    </Segment>
-                                </Grid.Row>
-                            </Grid.Column>
-                        </Grid>
-                        <Grid columns={1}>
-                            <Grid.Column>
-                                <Grid.Row>
-                                    <Segment raised>
-                                        <Label content='Order By' color='blue' ribbon />
+                            {/*RadioButton*/}
+                            <Grid columns={1} stackable>
+                                <Grid.Column>
+                                    <Grid.Row>
+                                        <Segment raised>
+                                            <Label content='Order By' color='blue' ribbon />
+                                            <Form.Group widths='equal'>
+                                                <Form.Field>
+                                                    <Radio slider
+                                                        label='Date Asc'
+                                                        name="OrderByID"
+                                                        checked
+                                                        onChange={e => handleInputChange(1)}
+                                                    />
 
-                                        <Form.Group widths='equal'>
-                                            <Form.Field>
-                                                <Radio slider
-                                                    label='Date Asc'
-                                                    name="orderby"
-                                                    checked
-                                                />
+                                                </Form.Field>
+                                                <Form.Field>
+                                                    <Radio slider
+                                                        label='Date Desc'
+                                                        name="OrderByID"
+                                                        onChange={e => handleInputChange(2)}
+                                                    />
 
-                                            </Form.Field>
-                                            <Form.Field>
-                                                <Radio slider
-                                                    label='Date Desc'
-                                                    name="orderby"
-                                                />
+                                                </Form.Field>
+                                                <Form.Field>
+                                                    <Radio slider
+                                                        label='Length Asc'
+                                                        name="OrderByID"
+                                                        onChange={e => handleInputChange(3)}
+                                                    />
 
-                                            </Form.Field>
-                                            <Form.Field>
-                                                <Radio slider
-                                                    label='Length Asc'
-                                                    name="orderby"
-                                                />
+                                                </Form.Field>
+                                                <Form.Field>
+                                                    <Radio slider
+                                                        label='Length Desc'
+                                                        name="OrderByID"
+                                                        onChange={e => handleInputChange(4)}
+                                                    />
 
-                                            </Form.Field>
-                                            <Form.Field>
-                                                <Radio slider
-                                                    label='Length Desc'
-                                                    name="orderby"
-                                                />
+                                                </Form.Field>
+                                            </Form.Group>
+                                        </Segment>
 
-                                            </Form.Field>
-                                        </Form.Group>
+                                    </Grid.Row>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Button content='Search'
+                                        loading={loadingSearchingFile}
+                                        disabled={isSubmitting || !dirty || !isValid}
+                                        positive type='submit' />
 
-                                    </Segment>
-                                </Grid.Row>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Button content='Search'
-                                    disabled={isSubmitting || !dirty || !isValid}
-                                    positive type='submit' />
+                                </Grid.Column>
+                            </Grid>
 
-                            </Grid.Column>
-                        </Grid>
+                        </Form>
+                    )}
+                </Formik>
 
-                    </Form>
-                )}
-            </Formik>
-        </Segment>
+            </Segment>
+            {
+                isLoadingContent ?
+                    <SearchFormResultList SearchFile={savedFileSearchedRegistry} />
+                    : null
+            }
+        </>
     )
 
 })

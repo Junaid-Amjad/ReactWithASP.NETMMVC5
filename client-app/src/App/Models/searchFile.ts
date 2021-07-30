@@ -1,6 +1,10 @@
-export interface SearchFile {
+export interface ISearchFile {
+    cameraName: string,
+    cameraDirectoryName: string,
     fileName: string,
-    createdTickDate: Date,
+    createdTickDate: bigint,
+    length: Number,
+    triggerType: number,
     folderPath: string,
     fullFolderandFileName: string
 }
