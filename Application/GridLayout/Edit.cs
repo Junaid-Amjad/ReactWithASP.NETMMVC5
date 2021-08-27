@@ -41,7 +41,7 @@ namespace Application.GridLayout
                 using(IDbContextTransaction transaction = _context.Database.BeginTransaction()){
                     try{
                         var Master = await _context.GridLayoutMasters.FindAsync(request.Master.GridLayoutMasterID);
-                        if(Master == null) return Result<Unit>.Failure("GridLayoutMaster not found");
+                        if(Master == null){await transaction.RollbackAsync();return Result<Unit>.Failure("GridLayoutMaster not found");} 
                         _mapper.Map(request.Master,Master);
                         var result = await _context.SaveChangesAsync() >0;
                         //if(!result) return  Result<Unit>.Failure("Failure to update Master");
@@ -52,7 +52,7 @@ namespace Application.GridLayout
                             _context.Remove(item);           
                             isUpdated = await _context.SaveChangesAsync() >0;          
                         }
-                        if(!isUpdated)return Result<Unit>.Failure("Failure to update Detail");
+                        if(!isUpdated){ transaction.Rollback();return Result<Unit>.Failure("Failure to update Detail");}
                         foreach (var item in request.Detail)
                         {
                             item.GridLayoutMasterID = request.Master.GridLayoutMasterID;

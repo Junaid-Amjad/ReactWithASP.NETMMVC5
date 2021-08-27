@@ -72,7 +72,11 @@ function App() {
 
                 <PrivateRoute exact path="/files" component={SavedFile} />
                 <PrivateRoute path="/files/:pathname+" component={SavedFile} />
-                <PrivateRoute exact path="/cameraView" component={CameraView} />
+                <PrivateRoute
+                  exact
+                  path="/cameraView/:id"
+                  component={CameraView}
+                />
                 <PrivateRoute exact path="/Search" component={SearchForm} />
                 <Route path="/server-error" component={ServerError} />
                 {/* <PrivateRoute path="/creategrid" component={CreatingGrid} /> */}

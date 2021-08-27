@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using API.Classes;
 using System.Xml.Linq;
 using System.IO;
+using Application.GridLayout;
+using System.Threading.Tasks;
+using API.DTOs;
 
 namespace API.Controllers
 {
@@ -59,6 +62,19 @@ namespace API.Controllers
                 }
             }         
             return Ok(obj.ToList());
+        }
+        [HttpGet("{AsciID}")]
+        public async Task<ActionResult<IEnumerable<cameraAttribute>>> getCameraURLFromDB(string AsciID)
+            {
+            List<cameraAttribute> objCameraObject = new List<cameraAttribute>();
+            long KeyID = Convert.ToInt64(GlobalFunction.ConvertASCIIIntoString(AsciID));
+            var result = await Mediator.Send(new Detail.Query { GridLayoutMasterID = KeyID });
+            foreach (var item in result.Value.Detail)
+            {
+                objCameraObject.Add
+                    (new cameraAttribute { LayoutName = result.Value.Master.LayoutName, noofColumns = result.Value.Master.NoofColumns, URL = item.CameraIP, GUID = Guid.NewGuid().ToString() });
+            }
+            return objCameraObject;
         }
 
 

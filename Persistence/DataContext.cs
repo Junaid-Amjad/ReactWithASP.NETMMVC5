@@ -1,4 +1,5 @@
 using Domain;
+using Domain.Users;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,5 +13,10 @@ namespace Persistence
         public DbSet<Activity> Activities { get; set; }
         public DbSet<GridLayoutMaster> GridLayoutMasters {get;set;}
         public DbSet<GridLayoutDetail> GridLayoutDetails { get; set; }
+        public DbSet<Rights> Rights { get; set; }
+        public DbSet<RightsAllotmentM> RightsAllotmentMs { get; set; }
+        public DbSet<RightsAllotmentD> RightsAllotmentDs { get; set; }
+        public DbSet<RightsAllotmentHistory> RightsAllotmentHistories { get; set; }
+        public DbSet<global> Globals { get; set; }
     }
 }

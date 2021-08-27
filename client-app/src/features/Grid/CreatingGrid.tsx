@@ -233,7 +233,7 @@ export default observer(function CreatingGrid() {
                       to="/dashboard"
                       floated="right"
                       type="button"
-                      content="Cancel"
+                      content="Back"
                     />
                   </Container>
                 </Grid.Column>

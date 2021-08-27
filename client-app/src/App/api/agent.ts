@@ -102,6 +102,8 @@ const SavedFiles = {
 
 const cameraView = {
   getLiveVideoUrl: () => requests.get<CameraView[]>("/CameraView"),
+  getLiveVideUrlFromDB: (keyid: string) =>
+    requests.get<CameraView[]>(`/CameraView/${keyid}`),
 };
 
 const StreamIP = {

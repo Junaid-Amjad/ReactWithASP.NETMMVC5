@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using API.Classes;
+using System.Net;
 
 namespace API.Controllers
 {
@@ -52,7 +53,7 @@ namespace API.Controllers
             }
         }
         [HttpGet("{URL}/{FilePath}")]
-        public ActionResult<CameraIPResult> Get(String URL, String FilePath){
+        public async Task<ActionResult<CameraIPResult>> Get(String URL, String FilePath){
             try
             {
                 if (FilePath == null)
@@ -60,6 +61,9 @@ namespace API.Controllers
                 if (URL == null)
                     return BadRequest(new CameraIPResult() { IPfound = false, Message = "URL is null", ProcessID = 0 });
                 URL = GlobalFunction.ConvertASCIIIntoString(URL);
+                if(! await checkURLExist(URL)){
+                    return Ok(new CameraIPResult() { IPfound = false, Message = "URL Not Exist", ProcessID = 0 });
+                }                
                 FilePath = GlobalFunction.ConvertASCIIIntoString(FilePath);
 
                 string[] FileSplit = FilePath.Split('/');
@@ -77,6 +81,7 @@ namespace API.Controllers
                 {
                     Directory.CreateDirectory(FilePath);
                 }
+                Thread.Sleep(5000);
 
                 Process p = __ffmpegRecording.Start($" -i {URL} -profile:v baseline -fflags -nobuffer -probesize 32 -level 3.0 -start_number 0 -hls_time 2 -hls_list_size 0 -f hls {Output}", FilePath);
                 if (p == null)
@@ -127,6 +132,23 @@ namespace API.Controllers
                 return Ok(new GlobalMessage() { Message = "Streaming Stoped Successfully", StatusID = 1, StatusDescription = "Success" });
             else
                 return BadRequest(new GlobalMessage() { Message = "Streaming Stoped Failed", StatusID = 2, StatusDescription = "Error" });
+        }
+
+        private async Task<bool> checkURLExist(string Url){
+            bool isUrlExist = true;
+            Uri urlCheck = new Uri(Url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlCheck);
+            request.Timeout = 2000;
+            HttpWebResponse response = null;
+            try{
+                response = (HttpWebResponse)await request.GetResponseAsync();
+            } 
+            catch(Exception){
+                isUrlExist = false;
+            }
+            if(response != null)
+                response.Close();
+            return isUrlExist;
         }
 
     }

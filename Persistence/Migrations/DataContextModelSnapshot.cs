@@ -157,6 +157,145 @@ namespace Persistence.Migrations
                     b.ToTable("GridLayoutMasters");
                 });
 
+            modelBuilder.Entity("Domain.Users.Rights", b =>
+                {
+                    b.Property<int>("RightID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RightDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RightName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isCancel")
+                        .HasColumnType("bit");
+
+                    b.HasKey("RightID");
+
+                    b.ToTable("Rights");
+                });
+
+            modelBuilder.Entity("Domain.Users.RightsAllotmentD", b =>
+                {
+                    b.Property<long>("RightsAllotmentDID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("RightID")
+                        .HasColumnType("int");
+
+                    b.Property<long>("RightsAllotmentMID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("RightsAllotmentDID");
+
+                    b.HasIndex("RightsAllotmentMID");
+
+                    b.ToTable("RightsAllotmentDs");
+                });
+
+            modelBuilder.Entity("Domain.Users.RightsAllotmentHistory", b =>
+                {
+                    b.Property<long>("RightsAllotmentHID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("EnteredUserID")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RightID")
+                        .HasColumnType("int");
+
+                    b.Property<long>("RightsAllotmentMID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserID")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserIP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserSystem")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RightsAllotmentHID");
+
+                    b.ToTable("RightsAllotmentHistories");
+                });
+
+            modelBuilder.Entity("Domain.Users.RightsAllotmentM", b =>
+                {
+                    b.Property<long>("RightsAllotmentID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("AssignByIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssignBySystem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AssignByUserID")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("EntryDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCancel")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateSystemIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdateSystemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdateUserID")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserID")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("RightsAllotmentID");
+
+                    b.ToTable("RightsAllotmentMs");
+                });
+
+            modelBuilder.Entity("Domain.global", b =>
+                {
+                    b.Property<DateTime>("CurrentDate")
+                        .HasColumnType("datetime2");
+
+                    b.ToTable("Globals");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -297,6 +436,17 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("GridLayoutMaster");
+                });
+
+            modelBuilder.Entity("Domain.Users.RightsAllotmentD", b =>
+                {
+                    b.HasOne("Domain.Users.RightsAllotmentM", "RightsAllotmentM")
+                        .WithMany()
+                        .HasForeignKey("RightsAllotmentMID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RightsAllotmentM");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

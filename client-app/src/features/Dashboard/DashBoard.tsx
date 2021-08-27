@@ -22,10 +22,6 @@ export default observer(function Dashboard() {
       loadgridLayoutMasterData();
     }
   }, [isRefreshNeeded, loadgridLayoutMasterData, objectOfGridLayoutMaster.length]);
-  const viewRecord = (index: any) => {
-    const record = [...objectOfGridLayoutMaster];
-    console.log(record[index].gridLayoutMasterID);
-  };
 
   const deleteRecord = (index: any) => {
     const record = [...objectOfGridLayoutMaster];
@@ -94,7 +90,13 @@ export default observer(function Dashboard() {
                     <Table.Cell>{value.noofColumns}</Table.Cell>
                     <Table.Cell textAlign="right">
                       <Button.Group>
-                        <Button primary onClick={() => viewRecord(index)}>
+                        <Button
+                          primary
+                          as={Link}
+                          to={`/cameraView/${convertStringToAscii(
+                            value.gridLayoutMasterID.toString()
+                          )}`}
+                        >
                           View
                         </Button>
                         <Button.Or />

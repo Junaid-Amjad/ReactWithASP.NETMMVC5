@@ -34,6 +34,8 @@ namespace API.Classes
     {
         public string GUID { get; set; }
         public string URL { get; set; }
+        public int noofColumns{get;set;}
+        public string LayoutName{get;set;}
         public string FilePath { get; set; }
         public string FileName { get; set; }
     }

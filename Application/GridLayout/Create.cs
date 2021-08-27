@@ -43,7 +43,7 @@ namespace Application.GridLayout
                     try{
                         _dataContext.GridLayoutMasters.Add(request.Master);
                         var result = await _dataContext.SaveChangesAsync() > 0;
-                        if (!result) return Result<Unit>.Failure("Issue with DB");
+                        if (!result){await transaction.RollbackAsync();return Result<Unit>.Failure("Issue with DB");} 
                         foreach (var item in request.Detail)
                         {
                             item.GridLayoutMasterID = request.Master.GridLayoutMasterID;
@@ -55,7 +55,7 @@ namespace Application.GridLayout
 
                     }
                     catch(Exception){
-                        transaction.RollbackAsync();
+                        await transaction.RollbackAsync();
                         return Result<Unit>.Failure(Unit.Value.ToString());
 
                     }

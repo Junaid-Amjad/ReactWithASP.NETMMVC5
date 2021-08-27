@@ -17,6 +17,9 @@ export default class CameraViewStore {
   istimerstart = false;
   cameraViewRegistry = new Map<string, CameraView>();
   processedcamerafile: cameralaodeddetails[] = [];
+  noofcolumns = 1;
+  layoutName = "";
+  isReloading = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -41,25 +44,31 @@ export default class CameraViewStore {
   };
 
   getIndividualIPStream = async (UUID: string) => {
+    this.isReloading = true;
     if (!this.istimerstart) this.calltimerInterval = false;
     let resultfromCameraObject = this.cameraViewRegistry.get(UUID);
     if (resultfromCameraObject) {
       await this.callTheFileForProcessing(resultfromCameraObject!);
     }
+    runInAction(() => {
+      this.isReloading = false;
+    });
   };
 
-  loadCameraView = async () => {
+  loadCameraView = async (id: string) => {
     this.loadingInitial = true;
     let isRecordFound = false;
     this.calltimerInterval = false;
     try {
       this.cameraViewRegistry.clear();
       await this.deleteFiles("0");
-      const camerav = await agent.cameraView.getLiveVideoUrl();
+      const camerav = await agent.cameraView.getLiveVideUrlFromDB(id);
       runInAction(async () => {
         this.browserLinkChanged = false;
         camerav.forEach((cameraview) => {
           this.setCameraResult(cameraview);
+          this.noofcolumns = cameraview.noofColumns;
+          this.layoutName = cameraview.layoutName;
           isRecordFound = true;
           if (isRecordFound) {
             this.getCameraViewResult.forEach(async (value, key) => {
@@ -159,7 +168,6 @@ export default class CameraViewStore {
       if (!cameraView.isProcessed) {
         const cameraurl = convertStringToAscii(cameraView.url);
         const camerafile = convertStringToAscii(cameraView.FilePath);
-
         cameraView.IPAddressPath = process.env.REACT_APP_IP_Addr;
         const result = await agent.StreamIP.setStreamOfCamera(
           camerafile,

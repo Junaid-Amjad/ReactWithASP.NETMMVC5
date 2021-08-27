@@ -8,10 +8,8 @@ export default observer(function NavBar() {
   const {
     cameraViewStore: { deleteFiles },
     userStore: { user, logout },
-    searchFileStore: { refreshvalue },
+    searchFileStore: { refreshvalue, isLoadingContent },
   } = useStore();
-
-  const [previousvalue, setpreviousvalue] = useState("");
 
   function handleItemClickLogout() {
     refreshvalue();
@@ -21,11 +19,10 @@ export default observer(function NavBar() {
     logout();
   }
   function handleItemClick(value: any) {
-    if (previousvalue === "/Search") {
+    if (isLoadingContent) {
       refreshvalue();
     }
     if (!deleteFiles("0")) alert("Error deleting files");
-    setpreviousvalue(value);
   }
 
   const [state, setState] = useState({
@@ -34,10 +31,10 @@ export default observer(function NavBar() {
     },
   });
 
-  let handleToggleDropdownMenu = () => {
+  let handleToggleDropdownMenu = () => { 
     let newState = Object.assign({}, state);
-    if (newState.dropdownMenuStyle.display === "none") {
-      newState.dropdownMenuStyle = { display: "flex" };
+  if (newState.dropdownMenuStyle.display === "none") {
+      newState.dropdownMenuStyle = { display: "flex" }; 
     } else {
       newState.dropdownMenuStyle = { display: "none" };
     }
@@ -63,18 +60,25 @@ export default observer(function NavBar() {
           </Menu.Item>
           {/*<Menu.Item as={NavLink} to='/activities' name="Activities" onClick={handleItemClick} />
                     <Menu.Item as={NavLink} to='/errors' name="Errors" onClick={handleItemClick} />*/}
+
+          <Menu.Item
+            as={NavLink}
+            to="/dashboard"
+            name="DashBoard"
+            onClick={() => handleItemClick("/dashboard")}
+          />
           <Menu.Item
             as={NavLink}
             to="/files"
             name="Files"
             onClick={() => handleItemClick("/files")}
           />
-          <Menu.Item
+          {/* <Menu.Item
             as={NavLink}
             to="/cameraView"
             name="Live"
             onClick={() => handleItemClick("/cameraView")}
-          />
+          /> */}
           <Menu.Item
             as={NavLink}
             to="/Search"
