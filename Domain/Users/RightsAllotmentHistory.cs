@@ -22,5 +22,6 @@ namespace Domain.Users
         public string UserIP{  get;set; }
         [Required]
         public string UserSystem{get;set;}
+        public long TotalRightValue { get; set; }
     }
 }

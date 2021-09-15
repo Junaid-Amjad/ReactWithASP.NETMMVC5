@@ -18,5 +18,7 @@ namespace Persistence
         public DbSet<RightsAllotmentD> RightsAllotmentDs { get; set; }
         public DbSet<RightsAllotmentHistory> RightsAllotmentHistories { get; set; }
         public DbSet<global> Globals { get; set; }
+        public DbSet<LogFile> LogFiles { get; set; }
+        public DbSet<UserView> UserViews { get; set; }
     }
 }

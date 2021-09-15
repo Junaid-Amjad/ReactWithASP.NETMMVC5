@@ -35,6 +35,10 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Detail.Query { UserID = UserID }));
         }
+        [HttpGet("GetUserRightValue/{UserID}")]
+        public async Task<IActionResult> getUserRightValue(String UserID){
+            return HandleResult(await Mediator.Send(new UserRightValue.Query { UserID = UserID }));
+        }
 
     }
 }

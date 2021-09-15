@@ -85,7 +85,7 @@ export default observer(function ActivityForm() {
             <MyTextArea name="description" placeholder="Description" rows={3} />
             <MySelectInput
               options={categoryOptions}
-              name="category"
+              name="category"              
               placeholder="Category"
             />
             <MyDateInput
@@ -105,6 +105,7 @@ export default observer(function ActivityForm() {
               positive
               type="submit"
               content="Submit"
+              
             />
             <Button
               as={Link}

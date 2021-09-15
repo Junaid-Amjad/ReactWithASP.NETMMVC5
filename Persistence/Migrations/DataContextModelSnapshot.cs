@@ -73,6 +73,18 @@ namespace Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCancel")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -99,12 +111,24 @@ namespace Persistence.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SystemIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SystemName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("UserViewID")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -157,6 +181,63 @@ namespace Persistence.Migrations
                     b.ToTable("GridLayoutMasters");
                 });
 
+            modelBuilder.Entity("Domain.LogFile", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserSystem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("sqlCommand")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("LogFiles");
+                });
+
+            modelBuilder.Entity("Domain.UserView", b =>
+                {
+                    b.Property<int>("UserViewID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCancel")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserViewName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserViewID");
+
+                    b.ToTable("UserViews");
+                });
+
             modelBuilder.Entity("Domain.Users.Rights", b =>
                 {
                     b.Property<int>("RightID")
@@ -170,6 +251,9 @@ namespace Persistence.Migrations
 
                     b.Property<string>("RightName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RightValue")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
@@ -223,6 +307,9 @@ namespace Persistence.Migrations
                     b.Property<long>("RightsAllotmentMID")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("TotalRightValue")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("UserID")
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
@@ -265,6 +352,9 @@ namespace Persistence.Migrations
 
                     b.Property<bool>("IsCancel")
                         .HasColumnType("bit");
+
+                    b.Property<long>("TotalRightValue")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("UpdateDateTime")
                         .HasColumnType("datetime2");

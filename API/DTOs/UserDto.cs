@@ -12,5 +12,6 @@ namespace API.DTOs
         public string Image { get; set; }
         public string ContactNo {get;set;}
         public string Email {get;set;}
+        public int UserViewID { get; set; }
     }
 }

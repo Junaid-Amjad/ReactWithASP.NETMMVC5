@@ -20,6 +20,9 @@ import CameraView from "../../features/cameraView/CameraView";
 import SearchForm from "../../features/Searching/SearchForm";
 import DashBoard from "../../features/Dashboard/DashBoard";
 import CreatingGrid from "../../features/Grid/CreatingGrid";
+import profile from "../../features/Settings/profile";
+import mapFloor from "../../features/Maps/mapFloor";
+import redirect from "../../features/Redirect/redirect";
 
 function App() {
   //const location = useLocation();
@@ -79,6 +82,10 @@ function App() {
                 />
                 <PrivateRoute exact path="/Search" component={SearchForm} />
                 <Route path="/server-error" component={ServerError} />
+                <PrivateRoute path="/profile/:userName" component={profile} />
+                <PrivateRoute path="/map" component={mapFloor} />
+                <PrivateRoute path="/redirect" component={redirect} />
+
                 {/* <PrivateRoute path="/creategrid" component={CreatingGrid} /> */}
                 <Route component={NotFound} />
               </Switch>

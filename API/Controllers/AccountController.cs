@@ -60,7 +60,8 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+            var user = await _userManager.Users.Where(x => x.Email == loginDto.Email && x.IsActive == true && x.IsCancel == false).FirstOrDefaultAsync(); ;
+//            var user = await _userManager.FindByEmailAsync(loginDto.Email);
             if (user == null) return Unauthorized();
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if (result.Succeeded)
@@ -69,6 +70,19 @@ namespace API.Controllers
             }
 
             return Unauthorized();
+        }
+        [HttpDelete("DisableAccount/{id}")]
+        public async Task<ActionResult<bool>> DisableData(Guid id)
+        {
+            var user = await _userManager.Users.Where(x => x.Id == id.ToString()).FirstOrDefaultAsync();
+            if (user == null) return Unauthorized();
+            user.IsActive = false;
+            user.IsCancel = true;
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+                return true;
+            else
+                return false;
         }
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
@@ -81,21 +95,113 @@ namespace API.Controllers
                 ModelState.AddModelError("username","UserName already Exist");
                 return ValidationProblem();
             }
-            var user = new AppUser{
-                DisplayName=registerDto.DisplayName,
-                Email=registerDto.Email,
-                UserName=registerDto.UserName,
-                PhoneNumber = registerDto.ContactNo
+            var user = new AppUser {
+                DisplayName = registerDto.DisplayName,
+                Email = registerDto.Email,
+                UserName = registerDto.UserName,
+                PhoneNumber = registerDto.ContactNo,
+                EntryDate = DateTime.Now,
+                IsActive = true,
+                IsCancel = false,
+                UserID = registerDto.UserID,
+                SystemIP = registerDto.UserIP,
+                SystemName = registerDto.UserSystem
             };
             var result = await _userManager.CreateAsync(user,registerDto.Password);
             if(result.Succeeded)
             {
+                _context.LogFiles.Add(new LogFile()
+                {
+                    Description = "Adding New User '"+user.Id+"' in Database",
+                    TransactionID = user.Id,
+                    EntryDate = DateTime.Now,
+                    sqlCommand = _userManager.ToString(),
+                    UserID=registerDto.UserID,
+                    UserIP = registerDto.UserIP,
+                    UserSystem=registerDto.UserSystem
+                });
+
+                await _context.SaveChangesAsync();
+
                 return CreateUserObject(user);
             }
             return BadRequest("Problem Registering User");
         }
+        [HttpPut("UpdatePassword")]
+        public async Task<ActionResult<UserDto>> UpdatePassword(Guid guid,RegisterDto registerDto)
+        {
+            var userInfo = await _userManager.Users.Where(z => z.Id == guid.ToString()).FirstOrDefaultAsync();
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(userInfo);
+            var result = await _userManager.ResetPasswordAsync(userInfo, resetToken, registerDto.Password);
+            if (result.Succeeded)
+            {
+                _context.LogFiles.Add(new LogFile()
+                {
+                    Description = "Password of user "+guid.ToString()+" is updated",
+                    TransactionID = guid.ToString(),
+                    EntryDate = DateTime.Now,
+                    sqlCommand = _userManager.ToString(),
+                    UserID = registerDto.UserID,
+                    UserIP = registerDto.UserIP,
+                    UserSystem = registerDto.UserSystem
+                });
 
-        [Authorize]
+                await _context.SaveChangesAsync();
+                return CreateUserObject(userInfo);
+
+            }
+            else
+            {
+                string Errors="";
+                foreach (var error in result.Errors){
+                    Errors += error.Description;
+                }
+                ModelState.AddModelError("password",Errors);
+                return ValidationProblem();
+            }
+
+        }
+        [HttpPut("UpdateUser/{guid}")]
+        public async Task<ActionResult<UserDto>> UpdateUser(Guid guid,RegisterDto registerDto)
+        {
+            if(await _userManager.Users.AnyAsync(x =>x.Email == registerDto.Email && x.Id != guid.ToString()))
+            {
+                ModelState.AddModelError("email", "Email already Exist");
+                return ValidationProblem();
+            }
+            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.UserName && x.Id != guid.ToString()))
+            {
+                ModelState.AddModelError("username", "UserName already Exist");
+                return ValidationProblem();
+            }
+            var userInfo = await _userManager.Users.Where(z => z.Id == guid.ToString()).FirstOrDefaultAsync();
+            userInfo.DisplayName = registerDto.DisplayName;
+            userInfo.Email = registerDto.Email;
+            userInfo.UserName = registerDto.UserName;
+            userInfo.PhoneNumber = registerDto.ContactNo;
+            userInfo.ImagePath = registerDto.ImagePath;
+            userInfo.UserViewID = registerDto.UserViewID;
+
+            var result = await _userManager.UpdateAsync(userInfo);
+            if (result.Succeeded)
+            {
+                _context.LogFiles.Add(new LogFile()
+                {
+                    Description = "User " + guid.ToString() + " is updated",
+                    TransactionID = guid.ToString(),
+                    EntryDate = DateTime.Now,
+                    sqlCommand = _userManager.ToString(),
+                    UserID = registerDto.UserID,
+                    UserIP = registerDto.UserIP,
+                    UserSystem = registerDto.UserSystem
+                });
+
+                await _context.SaveChangesAsync();
+                return CreateUserObject(userInfo);
+            }
+            return BadRequest(result.Errors.ToList());
+        }
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
@@ -106,28 +212,45 @@ namespace API.Controllers
 
         [HttpGet("GetAllUsers")]
         public async Task<ActionResult<List<UserDto>>> getAllUsers(){
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.Where(x=>x.IsActive == true && x.IsCancel == false).ToListAsync();
             //Excluding the admin user
-            var userList = users.Where(x => x.Id != "4ef591bb-00e5-4864-99fd-2eb74ffb65f7").ToList();
+            var userList = users.Where(x => x.UserName != "Admin").ToList();
             List<UserDto> objectToReturn = new List<UserDto>();
             foreach (var item in userList)
             {
-                objectToReturn.Add(new UserDto(){ContactNo=item.PhoneNumber,
-                DisplayName=item.DisplayName,
-                Email=item.Email,
-                UserName=item.UserName,
-                id=Guid.Parse(item.Id)});
+                objectToReturn.Add(new UserDto(){ContactNo=ConvertNullToString(item.PhoneNumber),
+                DisplayName=ConvertNullToString(item.DisplayName),
+                Email=ConvertNullToString(item.Email),
+                UserName=ConvertNullToString(item.UserName),
+                id=Guid.Parse(item.Id),
+                Image=ConvertNullToString(item.ImagePath),
+                UserViewID=Convert.ToInt16(item.UserViewID)});
             }
             return objectToReturn;
         }
-
+        [HttpGet("GetUserData/{id}")]
+        public async Task<ActionResult<UserDto>> GetUserData(Guid id){
+            var user = await _userManager.Users.Where(x => x.Id == id.ToString()).FirstOrDefaultAsync();            
+            UserDto userDto = new UserDto(){ContactNo=ConvertNullToString(user.PhoneNumber),
+                DisplayName=ConvertNullToString(user.DisplayName),
+                Email=ConvertNullToString(user.Email),
+                UserName=ConvertNullToString(user.UserName),
+                id=Guid.Parse(user.Id),
+                Image = ConvertNullToString(user.ImagePath),
+                UserViewID = Convert.ToInt16(user.UserViewID)};
+            return userDto;
+        }
+        private string ConvertNullToString(object value){
+            return value == null ? "" : value.ToString();
+        }
         private UserDto CreateUserObject(AppUser user){
             return new UserDto{
-                DisplayName=user.DisplayName,
-                Image=null,
-                Token = _token.CreateToken(user),
-                UserName=user.UserName,
+                DisplayName=ConvertNullToString(user.DisplayName),
+                Image=ConvertNullToString(user.ImagePath),
+                Token = ConvertNullToString(_token.CreateToken(user)),
+                UserName=ConvertNullToString(user.UserName),
                 id=Guid.Parse(user.Id),
+                UserViewID=Convert.ToInt16(user.UserViewID)
             };
         }
     }

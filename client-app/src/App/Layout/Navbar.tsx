@@ -31,10 +31,10 @@ export default observer(function NavBar() {
     },
   });
 
-  let handleToggleDropdownMenu = () => { 
+  let handleToggleDropdownMenu = () => {
     let newState = Object.assign({}, state);
-  if (newState.dropdownMenuStyle.display === "none") {
-      newState.dropdownMenuStyle = { display: "flex" }; 
+    if (newState.dropdownMenuStyle.display === "none") {
+      newState.dropdownMenuStyle = { display: "flex" };
     } else {
       newState.dropdownMenuStyle = { display: "none" };
     }
@@ -95,7 +95,7 @@ export default observer(function NavBar() {
               <Dropdown.Menu className="dropdownitem">
                 <Dropdown.Item
                   as={Link}
-                  to={`/profile/${user?.username}`}
+                  to={`/profile/${user?.id}`}
                   text="My Profile"
                   icon="user"
                   onClick={() => handleItemClick("/profile")}
@@ -154,7 +154,7 @@ export default observer(function NavBar() {
                 <Dropdown.Menu>
                   <Dropdown.Item
                     as={Link}
-                    to={`/profile/${user?.username}`}
+                    to={`/profile/${user?.id}`} //${user?.username}
                     text="My Profile"
                     icon="user"
                     onClick={handleItemClick}

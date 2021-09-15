@@ -14,5 +14,6 @@ namespace Domain.Users
         public int ParentID { get; set; }
         public bool isActive { get; set; }
         public bool isCancel { get; set; }
+        public long RightValue { get; set; }
     }
 }

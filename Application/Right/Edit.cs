@@ -49,7 +49,22 @@ namespace Application.Right
                         Master.UpdateSystemIP = request.rightsAllotmentM.UpdateSystemIP;
                         Master.UpdateSystemName = request.rightsAllotmentM.UpdateSystemName;
                         Master.UpdateUserID = request.rightsAllotmentM.UpdateUserID;
+                        Master.TotalRightValue = request.rightsAllotmentM.TotalRightValue;
                         var result = await _dataContext.SaveChangesAsync() > 0;
+
+                        _dataContext.LogFiles.Add(new Domain.LogFile()
+                        {
+                            TransactionID = request.rightsAllotmentM.RightsAllotmentID.ToString(),
+                            Description = "Updating User in the Database",
+                            EntryDate = request.rightsAllotmentM.UpdateDateTime??DateTime.Now,
+                            sqlCommand = request.rightsAllotmentM.ToString(),
+                            UserID = request.rightsAllotmentM.UpdateUserID,
+                            UserIP = request.rightsAllotmentM.UpdateSystemIP,
+                            UserSystem = request.rightsAllotmentM.UpdateSystemName
+                        });
+                        await _dataContext.SaveChangesAsync();
+
+
                         var gridLayoutDetail = await _dataContext.RightsAllotmentDs.Where(m => m.RightsAllotmentMID == request.rightsAllotmentM.RightsAllotmentID).ToListAsync();
                         bool isUpdated = false;
                         foreach (var item in gridLayoutDetail)
@@ -71,7 +86,8 @@ namespace Application.Right
                                 UserID = request.rightsAllotmentM.UserID,
                                 UserIP = request.rightsAllotmentM.UpdateSystemIP,
                                 UserSystem = request.rightsAllotmentM.UpdateSystemName,
-                                EnteredUserID = request.rightsAllotmentM.UpdateUserID
+                                EnteredUserID = request.rightsAllotmentM.UpdateUserID,
+                                TotalRightValue=request.rightsAllotmentM.TotalRightValue
 
                             });
                             await _dataContext.SaveChangesAsync();

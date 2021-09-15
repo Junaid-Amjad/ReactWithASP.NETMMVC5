@@ -52,7 +52,7 @@ namespace Application.GridLayout
                             _context.Remove(item);           
                             isUpdated = await _context.SaveChangesAsync() >0;          
                         }
-                        if(!isUpdated){ transaction.Rollback();return Result<Unit>.Failure("Failure to update Detail");}
+                        if(!isUpdated){ await transaction.RollbackAsync();return Result<Unit>.Failure("Failure to update Detail");}
                         foreach (var item in request.Detail)
                         {
                             item.GridLayoutMasterID = request.Master.GridLayoutMasterID;
@@ -64,7 +64,7 @@ namespace Application.GridLayout
 
                     }
                     catch(Exception){
-                        transaction.RollbackAsync();
+                        await transaction.RollbackAsync();
                         return Result<Unit>.Failure("Failure In Transaction");
                     }
                 }

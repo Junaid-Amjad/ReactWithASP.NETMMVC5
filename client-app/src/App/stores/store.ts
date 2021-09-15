@@ -4,6 +4,7 @@ import CameraViewStore from "./cameraViewStore";
 import Commonstore from "./commonStore";
 import GridLayoutStore from "./gridLayoutStore";
 import ModalStore from "./modalStore";
+import ProfileStore from "./Profile/profileStore";
 import SavedFileStore from "./savedFileStore";
 import SearchFile from "./searchfile";
 import UserStore from "./userStore";
@@ -17,6 +18,7 @@ interface Store {
   cameraViewStore: CameraViewStore;
   searchFileStore: SearchFile;
   gridLayoutStore: GridLayoutStore;
+  profileStore: ProfileStore;
 }
 
 export const store: Store = {
@@ -28,6 +30,7 @@ export const store: Store = {
   cameraViewStore: new CameraViewStore(),
   searchFileStore: new SearchFile(),
   gridLayoutStore: new GridLayoutStore(),
+  profileStore: new ProfileStore(),
 };
 
 export const StoreContext = createContext(store);

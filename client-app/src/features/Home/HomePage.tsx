@@ -33,7 +33,7 @@ export default observer(function HomePage() {
               {userStore.isLoggedIn ? (
                 <>
                   {/*<Header as='h2' inverted content='Welcome to StrandUSA Application' />*/}
-                  <Button as={Link} to="/dashboard" size="huge" inverted>
+                  <Button as={Link} to="/redirect" size="huge" inverted>
                     Go to Dashboard
                   </Button>
                 </>

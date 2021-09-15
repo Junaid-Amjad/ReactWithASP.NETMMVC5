@@ -17,7 +17,13 @@ export default class UserStore {
       const user = await agent.Account.login(creds);
       store.commonStore.setToken(user.token);
       runInAction(() => (this.user = user));
-      history.push("/dashboard");
+      // if (this.user?.userViewID === 0) {
+      //   alert("Please select the View for the Dashboard");
+      //   history.push(`/profile/${user.id}`);
+      // } else if (this.user?.userViewID === 3) {
+      //   history.push("/map");
+      // } else history.push("/dashboard");
+      history.push("/redirect");
       store.modalStore.closeModal();
     } catch (error) {
       throw error;

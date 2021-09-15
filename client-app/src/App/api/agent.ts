@@ -8,6 +8,8 @@ import { CameraIPResult } from "../Models/cameraIPResult";
 import { CameraView } from "../Models/cameraView";
 import { globalMessage } from "../Models/globalMessage";
 import { ICameraSettingList } from "../Models/gridLayout";
+import { userProfile } from "../Models/Profile/userProfile";
+import { userView } from "../Models/Profile/userView";
 import { SavedFile } from "../Models/savedFile";
 import { ISearchFile } from "../Models/searchFile";
 import { User, UserFormValues } from "../Models/user";
@@ -100,6 +102,20 @@ const SavedFiles = {
     requests.get<SavedFile[]>(`/SavedFile/${Pathname}`),
 };
 
+const SystemInformation = {
+  getSystemIP: () => fetch("https://geolocation-db.com/json/"),
+};
+
+const Profile = {
+  getUserViews: () => requests.get<userView[]>("/Profile/GetUserViews"),
+  getUserProfile: (userID: string) =>
+    requests.get<userProfile>(`Account/GetUserData/${userID}`),
+  getUserViewsByID: (viewID: number) =>
+    requests.get<string>(`/Profile/GetUserViewById/${viewID}`),
+  updateUserProfile: (guid: string, userProfile: userProfile) =>
+    axios.put<userProfile>(`/Account/UpdateUser/${guid}`, userProfile),
+};
+
 const cameraView = {
   getLiveVideoUrl: () => requests.get<CameraView[]>("/CameraView"),
   getLiveVideUrlFromDB: (keyid: string) =>
@@ -148,6 +164,8 @@ const agent = {
   StreamIP,
   SearchFiles,
   gridLayout,
+  Profile,
+  SystemInformation,
 };
 
 export default agent;

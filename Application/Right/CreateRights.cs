@@ -35,6 +35,17 @@ namespace Application.Right
                         _context.RightsAllotmentMs.Add(request.UserRightsMaster);
                         var result = await _context.SaveChangesAsync() > 0;
                         if (!result) { await transaction.RollbackAsync(); return Result<Unit>.Failure("Saving Data Error"); }
+                        _context.LogFiles.Add(new Domain.LogFile()           
+                        {
+                            TransactionID = request.UserRightsMaster.RightsAllotmentID.ToString(),
+                            Description = "Adding User in the Database",
+                            EntryDate = request.UserRightsMaster.EntryDateTime,
+                            sqlCommand = request.UserRightsMaster.ToString(),
+                            UserID=request.UserRightsMaster.AssignByUserID,
+                            UserIP=request.UserRightsMaster.AssignByIP,
+                            UserSystem=request.UserRightsMaster.AssignBySystem
+                        });
+                        await _context.SaveChangesAsync();
                         foreach (var item in request.UserRightsDetail)
                         {
                             item.RightsAllotmentMID = request.UserRightsMaster.RightsAllotmentID;
@@ -48,8 +59,8 @@ namespace Application.Right
                                 UserID = request.UserRightsMaster.UserID,
                                 UserIP = request.UserRightsMaster.AssignByIP,
                                 UserSystem = request.UserRightsMaster.AssignBySystem,
-                                EnteredUserID=request.UserRightsMaster.AssignByUserID
-
+                                EnteredUserID=request.UserRightsMaster.AssignByUserID,
+                                TotalRightValue = request.UserRightsMaster.TotalRightValue
                             });
                             await _context.SaveChangesAsync();
                         }

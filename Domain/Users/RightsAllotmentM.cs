@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Users
 {
@@ -10,6 +11,7 @@ namespace Domain.Users
         [ScaffoldColumn(true)]
         [StringLength(450, ErrorMessage = "Length should be less than 450")]
         public String UserID { get; set; }
+
         public DateTime EntryDateTime { get; set; }
         [ScaffoldColumn(true)]
         [StringLength(450,ErrorMessage ="Length should be less than 450")]
@@ -24,5 +26,6 @@ namespace Domain.Users
         public DateTime? UpdateDateTime { get; set; }
         public bool IsActive { get; set; }
         public bool IsCancel { get; set; }
+        public long TotalRightValue { get; set; }
     }
 }
