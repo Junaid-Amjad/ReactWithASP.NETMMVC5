@@ -7,7 +7,7 @@ import { GridLayoutDto } from "../DTO/GridLayoutDto";
 import { ICameraSettingList } from "../Models/gridLayout";
 import { IGridLayout } from "../Models/IGridLayout";
 
-interface Ilistofcamera {
+export interface Ilistofcamera {
   text: string;
   value: string;
 }
@@ -134,8 +134,8 @@ export default class GridLayoutStore {
   loadCameraList = async () => {
     this.loadingInitial = true;
     try {
-      this.objectOfCameras.slice(0, this.objectOfCameras.length);
-      this.listOfCameraIP.slice(0, this.listOfCameraIP.length);
+      this.objectOfCameras.splice(0, this.objectOfCameras.length);
+      this.listOfCameraIP.splice(0, this.listOfCameraIP.length);
 
       const listobjectOfCameras = await agent.gridLayout.getresultofcamera();
       runInAction(() => {
@@ -149,10 +149,12 @@ export default class GridLayoutStore {
         this.loadingInitial = false;
         this.isRefreshNeeded = false;
       });
+      return this.listOfCameraIP;
     } catch (error) {
       console.log(error);
       runInAction(() => {
         this.loadingInitial = false;
+        return this.listOfCameraIP;
       });
     }
   };

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain;
+using Domain.Maps;
 using Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
@@ -21,6 +22,31 @@ namespace Persistence
                 {
                     await userManager.CreateAsync(user,"Pa$$w0rd");
                 }
+            }
+            if(!context.MapCategories.Any()){
+                var listofMapCategories = new List<MapCategories>{
+                    new MapCategories{
+                        MapCategoriesID=1,
+                        MapCategoriesName="Map",
+                        MapCategoriesRemarks="To Add Map",
+                        IsActive=true,
+                        IsCancel=false},
+                    new MapCategories{
+                        MapCategoriesID=2,
+                        MapCategoriesName="Camera",
+                        MapCategoriesRemarks="To Add Camera",
+                        IsActive=true,
+                        IsCancel=false},
+                    new MapCategories{
+                        MapCategoriesID=3,
+                        MapCategoriesName="None",
+                        MapCategoriesRemarks="To Add Nothing",
+                        IsActive=true,
+                        IsCancel=false},
+                };
+                
+                await context.MapCategories.AddRangeAsync(listofMapCategories);
+                await context.SaveChangesAsync();
             }
             if(!context.UserViews.Any()){
                 var userViews = new List<UserView>{

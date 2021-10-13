@@ -202,7 +202,7 @@ namespace API.Controllers
             return BadRequest(result.Errors.ToList());
         }
         //[Authorize]
-        [HttpGet]
+        [HttpGet("GetCurrentUser")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));

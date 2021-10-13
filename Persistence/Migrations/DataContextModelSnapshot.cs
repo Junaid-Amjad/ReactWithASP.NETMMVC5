@@ -214,6 +214,132 @@ namespace Persistence.Migrations
                     b.ToTable("LogFiles");
                 });
 
+            modelBuilder.Entity("Domain.Maps.MapCategories", b =>
+                {
+                    b.Property<int>("MapCategoriesID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCancel")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MapCategoriesName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MapCategoriesRemarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MapCategoriesID");
+
+                    b.ToTable("MapCategories");
+                });
+
+            modelBuilder.Entity("Domain.Maps.MapList", b =>
+                {
+                    b.Property<long>("MapListID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("CameraIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageSrc")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCancel")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LevelNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MapCategoriesID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MapListName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ParentID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("SystemIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SystemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUserID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdateUserIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdateUserSystem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MapListID");
+
+                    b.ToTable("MapLists");
+                });
+
+            modelBuilder.Entity("Domain.Maps.MapPosition", b =>
+                {
+                    b.Property<long>("MapPositionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<long>("MapListID")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Rotation")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SavedStatusID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SystemIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SystemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
+
+                    b.Property<int>("X")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
+                    b.HasKey("MapPositionID");
+
+                    b.HasIndex("MapListID");
+
+                    b.ToTable("MapPositions");
+                });
+
             modelBuilder.Entity("Domain.UserView", b =>
                 {
                     b.Property<int>("UserViewID")
@@ -526,6 +652,17 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("GridLayoutMaster");
+                });
+
+            modelBuilder.Entity("Domain.Maps.MapPosition", b =>
+                {
+                    b.HasOne("Domain.Maps.MapList", "MapList")
+                        .WithMany()
+                        .HasForeignKey("MapListID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MapList");
                 });
 
             modelBuilder.Entity("Domain.Users.RightsAllotmentD", b =>

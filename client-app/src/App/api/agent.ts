@@ -2,12 +2,17 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { GridLayoutMaster } from "../apiClass/GridLayout/GridLayoutMaster";
+import { ParameterForDelete } from "../common/class/parameterForDelete";
 import { GridLayoutDto } from "../DTO/GridLayoutDto";
+import { RootObject } from "../json/jsonMap";
 import { Activity } from "../Models/activity";
 import { CameraIPResult } from "../Models/cameraIPResult";
 import { CameraView } from "../Models/cameraView";
 import { globalMessage } from "../Models/globalMessage";
 import { ICameraSettingList } from "../Models/gridLayout";
+import { MapCategories } from "../Models/Map/mapCategories";
+import { MapList } from "../Models/Map/mapList";
+import { MapPosition } from "../Models/Map/mapPosition";
 import { userProfile } from "../Models/Profile/userProfile";
 import { userView } from "../Models/Profile/userView";
 import { SavedFile } from "../Models/savedFile";
@@ -89,7 +94,8 @@ const Activities = {
 };
 
 const Account = {
-  current: () => requests.get<User>("/Account"),
+  //  current: () => requests.get<User>("/Account"),
+  current: () => requests.get<User>("/Account/GetCurrentUser"),
   login: (user: UserFormValues) =>
     axios.post<User>("/Account/login", user).then(responseBody),
   register: (user: UserFormValues) =>
@@ -114,6 +120,26 @@ const Profile = {
     requests.get<string>(`/Profile/GetUserViewById/${viewID}`),
   updateUserProfile: (guid: string, userProfile: userProfile) =>
     axios.put<userProfile>(`/Account/UpdateUser/${guid}`, userProfile),
+};
+
+const Map = {
+  getMapCategories: () =>
+    requests.get<MapCategories[]>("/Map/getMapCategories"),
+  saveMapData: (formData: FormData) =>
+    axios.post("/Map/saveMapRecord", formData),
+  updateMapRecord: (formData: FormData) =>
+    axios.put("/Map/updateMap", formData),
+  getMapDataInXML: () => axios.get<RootObject>("/Map/getDataInXML"),
+  getMapData: (UserID: string) =>
+    requests.get<MapList[]>(`/Map/getMapData/${UserID}`),
+  deleteMapRecord: (parameterForDelete: ParameterForDelete) =>
+    axios.delete(`/Map/deleteRecord/`, { data: parameterForDelete }),
+  getMapRecord: (MapListID: number) =>
+    requests.get<MapList>(`/Map/getMapRecord/${MapListID}`),
+  getMapPosition: (MapListID: number) =>
+    requests.get<MapPosition>(`/Map/getMapPosition/${MapListID}`),
+  saveMapPosition: (MapPosition: MapPosition) =>
+    axios.post("/Map/setPositionOnTheMap/", MapPosition),
 };
 
 const cameraView = {
@@ -166,6 +192,7 @@ const agent = {
   gridLayout,
   Profile,
   SystemInformation,
+  Map,
 };
 
 export default agent;
